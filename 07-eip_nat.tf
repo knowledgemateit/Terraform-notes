@@ -3,7 +3,7 @@
 ###################################################################
 
 resource "aws_eip" "eip" {
-  domain      = vpc
+  domain      = "vpc"
   tags = {
     Name = "${var.project}-eip"
     Project = var.project

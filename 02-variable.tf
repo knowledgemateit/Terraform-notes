@@ -15,7 +15,17 @@ variable "type" {
   default = "t2.micro"
 }
 
-variable "ami" {
-  description = "amazon linux 2 ami"
-  default = "ami-084568db4383264d4"
+variable "dbami" {
+  description = "Red Hat Enterprise Linux version 10"
+  default = "ami-0ad50334604831820"
+}
+
+variable "webami" {
+  description = "Amazon Linux 2023 AMI"
+  default = "ami-0f3caa1cf4417e51b"
+}
+
+variable "bastianami" {
+  description = "Ubuntu Server 24.04 LTS"
+  default = "ami-0b6c6ebed2801a5cb"
 }

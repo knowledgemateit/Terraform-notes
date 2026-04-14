@@ -1,67 +1,172 @@
-Project Diagram:
-![image](https://github.com/user-attachments/assets/52384194-1fd2-47f3-b28a-257e5d229736)
+# Ansible – Configuration Management Quick Reference
 
+## 🛠️ Configuration Management Tools
 
-Terraform installation: 
+| Tool | Vendor | Notes |
+|---|---|---|
+| **Ansible** | Red Hat | Agentless, SSH-based |
+| **Chef** | Progress | Agent-based, Ruby DSL |
+| **Puppet** | Puppet Inc. | Agent-based, declarative |
+| **SaltStack** | VMware | Agent or agentless |
 
+---
+
+## 🔵 Ansible – Core Concepts
+
+| Feature | Detail |
+|---|---|
+| **Origin** | Open Source (Red Hat) |
+| **Language** | Python |
+| **Architecture** | Agentless |
+| **Communication** | SSH Mechanism |
+| **Method** | Push Mechanism |
+| **Extensibility** | Module Support |
+
+---
+
+## 🧩 Ansible Components
+
+| Component | Description |
+|---|---|
+| **Ad-hoc** | One-liner commands for quick tasks |
+| **Playbooks** | YAML files defining automation workflows |
+| **Roles** | Reusable, structured sets of playbooks |
+| **Tower** | GUI / enterprise management layer (AWX) |
+| **Vault** | Encrypted storage for secrets & passwords |
+
+---
+
+## ⚙️ Setup Guide
+
+### 🖥️ Master Node Setup
+
+```bash
+# Step 1 – Generate SSH key pair
+ssh-keygen
+# Public key location:
+# /root/.ssh/id_rsa.pub
+
+# Step 2 – Install EPEL repo and Ansible
+sudo amazon-linux-extras install epel
+yum install ansible pip -y
+
+# Step 3 – Verify installation
+ansible --version
+
+# Step 4 – Test SSH connection to agent
+ssh root@<agentPublicIP>
+```
+
+---
+
+### 🤖 Agent Node Setup
+
+```bash
+# Step 1 – Generate SSH key on agent (optional)
 ssh-keygen
 
-apt update
+# Step 2 – Copy Master's public key to Agent's authorized_keys
+# On MASTER, run:
+ssh-copy-id root@<agentPublicIP>
 
-wget https://releases.hashicorp.com/terraform/0.14.7/terraform_0.14.7_linux_amd64.zip
+# OR manually append master's public key:
+# Master:  /root/.ssh/id_rsa.pub
+# Agent:   /root/.ssh/authorized_keys
+```
 
-apt install unzip
+---
 
-unzip terraform_0.14.7_linux_amd64.zip
+## 📁 Ansible Configuration Files
 
-mv terraform /usr/local/bin/
+### Main Configuration File
+```bash
+vi /etc/ansible/ansible.cfg
+```
 
-terraform -v
+Uncomment these two lines:
+```ini
+inventory   = /etc/ansible/hosts
+sudo_user   = root
+```
 
+---
 
+### Inventory File
+```bash
+vi /etc/ansible/hosts
+```
 
+```ini
+[agents]
+13.234.119.49 ansible_user=root
+```
 
-------------------------------------------------------------
+> Add all agent IPs under a group name (e.g., `[agents]`). You can define multiple groups.
 
+---
 
-ubuntu Jenkins installation
+## ⚡ Ad-hoc Commands
 
-apt install openjdk-11-jre-headless
+Ad-hoc commands run one-off tasks directly from the command line without a playbook.
 
-apt install git maven tree -y
+### Syntax
+```bash
+ansible <group> -m <module> -a "<arguments>"
+```
 
-apt update -y
+### Examples
 
- curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
- 
- echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+| Task | Command |
+|---|---|
+| **Ping all agents** | `ansible agents -m ping` |
+| **Install a package** | `ansible agents -m yum -a "name=git state=present"` |
+| **Copy a file** | `ansible agents -m copy -a "src=/opt/abc.txt dest=/opt/abc.txt"` |
+| **Remove a package** | `ansible agents -m yum -a "name=httpd state=absent"` |
+| **Start a service** | `ansible agents -m service -a "name=httpd state=started"` |
+| **Stop a service** | `ansible agents -m service -a "name=httpd state=stopped"` |
 
-apt update
+---
 
-apt install jenkins
+## 📦 Common Modules Reference
 
-sytemctl start jenkins
+| Module | Purpose |
+|---|---|
+| `ping` | Test connectivity to agents |
+| `yum` | Install / remove packages (RHEL/CentOS) |
+| `apt` | Install / remove packages (Ubuntu/Debian) |
+| `copy` | Copy files from master to agent |
+| `service` | Start, stop, restart system services |
+| `shell` | Run shell commands on agents |
+| `file` | Manage files and directories |
+| `user` | Manage user accounts |
 
-systemctl start jenkins
+---
 
-cat /var/lib/jenkins/secrets/initialAdminPassword
+## 🔄 How Ansible Works (Push Model)
 
------------------------------------
+```
+Master Node
+    │
+    │  SSH (Push)
+    ▼
+Agent Nodes
+  ├── Agent 1 (IP: x.x.x.x)
+  ├── Agent 2 (IP: x.x.x.x)
+  └── Agent N (IP: x.x.x.x)
+```
 
-amazon linux jenkins installation:
+1. Master generates SSH keys and copies the **public key** to each agent's `authorized_keys`
+2. Master **pushes** commands/playbooks over SSH — no agent software needed on nodes
+3. Ansible modules execute on the agent and return results to master
 
-sudo amazon-linux-extras install java-openjdk11 -y
+---
 
-sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+## 📂 Key File Locations
 
-sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-
-sudo yum install jenkins -y
-
-sudo systemctl enable jenkins
-
-sudo systemctl start jenkins
+| File | Path | Purpose |
+|---|---|---|
+| Main config | `/etc/ansible/ansible.cfg` | Global Ansible settings |
+| Inventory | `/etc/ansible/hosts` | List of managed nodes |
+| SSH Private Key | `/root/.ssh/id_rsa` | Master's private key |
+| SSH Public Key | `/root/.ssh/id_rsa.pub` | Copy this to agents |
+| Agent Auth Keys | `/root/.ssh/authorized_keys` | Paste master's public key here |

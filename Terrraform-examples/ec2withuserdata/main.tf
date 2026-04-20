@@ -4,9 +4,9 @@ region = "us-east-1"
 }
 # EC2 instance
 resource "aws_instance" "web_server" {
-ami = "ami-071226ecf16aa7d96"
+ami = "ami-098e39bafa7e7303d"
 instance_type = "t2.micro"
-key_name = "tets22"
+key_name = "terraform_Server"
 user_data = <<-EOF
  #!/bin/bash
  sudo yum update -y

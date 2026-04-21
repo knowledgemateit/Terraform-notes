@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.0"
+      version = ">= 3.0"
     }
   }
 }
@@ -16,7 +16,7 @@ provider "aws" {
 }
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.6.0"
+  version = "~> 2.19.0"
 
   name = "single-instance"
 

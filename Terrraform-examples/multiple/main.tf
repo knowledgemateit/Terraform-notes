@@ -1,3 +1,14 @@
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
+}
+
 provider "aws" {
   region     = "us-east-1"
 }
@@ -9,12 +20,12 @@ module "ec2_instance" {
 
   name = "instance-${each.key}"
 
-  ami                    = "ami-071226ecf16aa7d96"
-  instance_type          = "t2.micro"
-  key_name               = "tets22"
+  ami                    = "ami-098e39bafa7e7303d"
+  instance_type          = "t3.micro"
+  key_name               = "terraform_Server"
   monitoring             = true
-  vpc_security_group_ids = ["sg-0c7d4230ac5a068f8"]
-  subnet_id              = "subnet-0051dcb35a8f998ca"
+  vpc_security_group_ids = ["sg-01175d2568a7f698b"]
+  subnet_id              = "subnet-082574a5d56740791"
 
   tags = {
     Terraform   = "true"

@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "xxxxxxxxxxxxxxxxxxxx"
-  secret_key = "xxxxxxxxxxxxxxxxxx"
+  # access_key = "xxxxxxxxxxxxxxxxxxxx"
+  # secret_key = "xxxxxxxxxxxxxxxxxx"
 }
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
@@ -9,9 +9,9 @@ module "ec2_instance" {
 
   name = "single-instance"
 
-  ami                    = "ami-071226ecf16aa7d96"
+  ami                    = "ami-098e39bafa7e7303d"
   instance_type          = "t2.micro"
-  key_name               = "tets22"
+  key_name               = "terraform_Server"
   monitoring             = true
   
   tags = {

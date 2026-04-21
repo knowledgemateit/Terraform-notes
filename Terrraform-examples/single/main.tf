@@ -11,7 +11,7 @@ module "ec2_instance" {
 
   ami                    = "ami-098e39bafa7e7303d"
   instance_type          = "t2.micro"
-  key_name               = "fdfdx"
+  key_name               = "terraform_Server"
   monitoring             = true
   
   tags = {

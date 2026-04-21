@@ -4,6 +4,6 @@ provider "aws" {
 }
 
 resource "aws_instance" "console" {
-  ami = "ami-0866a3c8686eaeeba"
-  instance = "t2.micro"
+  ami = "ami-098e39bafa7e7303d"
+  instance = "t3.micro"
 }

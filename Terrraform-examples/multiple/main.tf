@@ -3,7 +3,7 @@ provider "aws" {
 }
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
+  version = "~> 3.6.0"
 
   for_each = toset(["one", "two", "three"])
 

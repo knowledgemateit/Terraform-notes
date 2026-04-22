@@ -67,26 +67,15 @@
 
 ## ⚙️ Phase 1: Terraform Installation
 
-### Step 1 – Download Terraform
+### Step 1 – Download Terraform – Install
 
 ```bash
-wget https://releases.hashicorp.com/terraform/1.11.3/terraform_1.11.3_linux_amd64.zip
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum install terraform
 ```
 
-### Step 2 – Install & Extract
-
-```bash
-apt install unzip -y
-unzip terraform_1.11.3_linux_amd64.zip
-```
-
-### Step 3 – Move to System PATH
-
-```bash
-mv terraform /usr/local/bin/
-```
-
-### Step 4 – Verify Installation
+### Step 2
 
 ```bash
 terraform -v

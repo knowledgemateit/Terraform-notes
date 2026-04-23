@@ -12,20 +12,20 @@ variable "vpc_subnets" {
 
 variable "type" {
   description = "Instance type"    
-  default = "t2.micro"
+  default = "t3.micro"
 }
 
 variable "dbami" {
   description = "Red Hat Enterprise Linux version 10"
-  default = "ami-0ad50334604831820"
+  default = "ami-056244ee7f6e2feb8"
 }
 
 variable "webami" {
   description = "Amazon Linux 2023 AMI"
-  default = "ami-0f3caa1cf4417e51b"
+  default = "ami-098e39bafa7e7303d"
 }
 
 variable "bastianami" {
   description = "Ubuntu Server 24.04 LTS"
-  default = "ami-0b6c6ebed2801a5cb"
+  default = "ami-0ec10929233384c7f"
 }

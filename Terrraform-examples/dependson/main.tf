@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "logs" {
   bucket = "bharath-devops-test-2025"
 }
 
-# 1. This resource UNLOCKS the bucket to allow public policies
+# STEP 1: Turn off the "Block Public Access" settings
 resource "aws_s3_bucket_public_access_block" "logs_access" {
   bucket = aws_s3_bucket.logs.id
 
@@ -16,11 +16,11 @@ resource "aws_s3_bucket_public_access_block" "logs_access" {
   restrict_public_buckets = false
 }
 
-# 2. This resource ATTACHES the actual policy
+# STEP 2: Attach the policy
 resource "aws_s3_bucket_policy" "allow_access" {
   bucket = aws_s3_bucket.logs.id
 
-  # CRITICAL: Wait for the bucket to be UNLOCKED before applying the policy
+  # CRITICAL: This must depend on the ACCESS BLOCK, not just the bucket!
   depends_on = [aws_s3_bucket_public_access_block.logs_access]
 
   policy = <<POLICY
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_policy" "allow_access" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid" : "PublicReadGetObject",
+      "Sid": "PublicReadGetObject",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",

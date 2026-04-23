@@ -12,6 +12,7 @@ module "ec2_instance" {
   instance_type          = "t3.micro"
   key_name               = "terraform_Server"
   monitoring             = true
+  subnet_id = "subnet-082574a5d56740791"
   
   tags = {
     Name = "terraform-instance"

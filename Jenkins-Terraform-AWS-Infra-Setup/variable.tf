@@ -5,12 +5,12 @@ variable "aws_region" {
 
 variable "key_name" {
   description = " SSH keys to connect to ec2 instance"
-  default     = "rajavan"
+  default     = "testjenkins"
 }
 
 variable "instance_type" {
   description = "instance type for ec2"
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "security_group" {
@@ -24,7 +24,7 @@ variable "tag_name" {
 }
 variable "ami_id" {
   description = "AMI for Amazonlinux Ec2 instance"
-  default     = "ami-0f3caa1cf4417e51b"
+  default     = "ami-0de6934e87badb694"
 }
 
 

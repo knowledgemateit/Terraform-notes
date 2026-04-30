@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Simplified checkout syntax
-                git branch: 'main', url: 'https://github.com/knowledgemateit/Terraform-Jenkins.git'
+                git branch: 'main', url: 'https://github.com/knowledgemateit/Terraform-notes.git'
             }
         }
 
